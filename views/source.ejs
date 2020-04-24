@@ -157,7 +157,7 @@
                     <td><%= item.stringdata %></td>
                     <td><%= item.integerdata %></td>
                     <td><%= item.floatdata %></td>
-                    <td><%= item.datedata %></td>
+                    <td><%= moment(item.datedata).format("YYYY-MM-DD") %></td>
                     <td><%= item.booleandata == 1 ? "true" : "false" %></td>
                     <td>
                         <a href="/edit/<%= item.id %>">
