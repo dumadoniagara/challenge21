@@ -88,12 +88,11 @@ module.exports = (db) => {
         error: true,
         message: err
       })
-      res.status(201).json({
-        error: false,
-        message: 'data success to be added'
-      });
+      res.status(201).redirect('/')
+
     });
   });
+
 
   // Delete Data refers to it's id
   router.get('/delete/:id', function (req, res, next) {
@@ -132,11 +131,10 @@ module.exports = (db) => {
         error: true,
         message: err
       });
-      res.status(201).json({});
+      // const data = [parseInt(req.params.id), req.body.stringdata, parseInt(req.body.integerdata), parseFloat(req.body.floatdata), JSON.parse(req.body.booleandata), req.body.datedata];
+      res.redirect('/');
     });
-    // const data = [parseInt(req.params.id), req.body.stringdata, parseInt(req.body.integerdata), parseFloat(req.body.floatdata), JSON.parse(req.body.booleandata), req.body.datedata];
-    res.redirect('/');
-  });
+  })
 
   return router;
 }
