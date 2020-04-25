@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 
-
 module.exports = (db) => {
-  // Get All data (READ)
+  // Home Page (READ) and Filter
   router.get('/', function (req, res, next) {
     const { checkId, id, checkString, string, checkInteger, integer, checkFloat, float, checkBool, bool, checkDate, startDate, endDate } = req.query;
     let isSearch = false;
@@ -15,7 +14,7 @@ module.exports = (db) => {
       isSearch = true;
     }
     if (checkString && string) {
-      query.push(`stringdata =  '${string}'`);
+      query.push(`stringdata LIKE  '%${string}%'`);
       isSearch = true;
     }
     if (checkInteger && integer) {
@@ -32,7 +31,7 @@ module.exports = (db) => {
     }
 
     if (checkDate && startDate && endDate) {
-      query.push(` datedata = BETWEEN '${startDate}' AND '${endDate}'`);
+      query.push(` datedata BETWEEN '${startDate}' AND '${endDate}'`);
       isSearch = true;
     }
 
@@ -56,7 +55,7 @@ module.exports = (db) => {
         total = data.rows[0].total;
         const pages = Math.ceil(total / limit);
 
-        let sql = `SELECT * FROM bread ${search} LIMIT $1 OFFSET $2 `
+        let sql = `SELECT * FROM bread ${search} ORDER BY id LIMIT $1 OFFSET $2 `
         db.query(sql, [limit, offset], (err, data) => {
           if (err) {
             return res.send(err);
@@ -64,7 +63,7 @@ module.exports = (db) => {
             return res.send(`data can not be found`);
           }
           else {
-            res.render('source', {
+            res.render('index', {
               data: data.rows,
               page,
               pages,
@@ -131,7 +130,6 @@ module.exports = (db) => {
         error: true,
         message: err
       });
-      // const data = [parseInt(req.params.id), req.body.stringdata, parseInt(req.body.integerdata), parseFloat(req.body.floatdata), JSON.parse(req.body.booleandata), req.body.datedata];
       res.redirect('/');
     });
   })
