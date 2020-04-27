@@ -8,6 +8,7 @@ module.exports = (db) => {
     const { checkId, id, checkString, string, checkInteger, integer, checkFloat, float, checkBool, bool, checkDate, startDate, endDate } = req.query;
     let isSearch = false;
     let query = [];
+    let url = req.url.includes('page') ? req.url : `/?page=1&`+req.url.slice(2)
 
     if (checkId && id) {
       query.push(`id = '${id}'`);
@@ -67,7 +68,8 @@ module.exports = (db) => {
               data: data.rows,
               page,
               pages,
-              moment
+              moment,
+              url
             });
           }
         });
@@ -88,7 +90,6 @@ module.exports = (db) => {
         message: err
       })
       res.status(201).redirect('/')
-
     });
   });
 
